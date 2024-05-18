@@ -354,6 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentRigidBody: {fileID: 0}
   HandPickup: {fileID: 6122371188610288853, guid: bd72174de4b7cdc4b92e79c6f0d2ea1b, type: 3}
+  LastCollider: {fileID: 0}
 --- !u!65 &6684191672030679086
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1121,6 +1122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentRigidBody: {fileID: 0}
   HandPickup: {fileID: 6122371188610288853, guid: bd72174de4b7cdc4b92e79c6f0d2ea1b, type: 3}
+  LastCollider: {fileID: 0}
 --- !u!65 &2860910316572235557
 BoxCollider:
   m_ObjectHideFlags: 0

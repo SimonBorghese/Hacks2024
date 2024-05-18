@@ -6,6 +6,8 @@ public class HandPickerup : MonoBehaviour
     public Rigidbody CurrentRigidBody;
 
     public InputActionReference HandPickup;
+
+    public Collider LastCollider;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,15 +25,24 @@ public class HandPickerup : MonoBehaviour
             if (Axis > 0.1f)
             {
                 CurrentRigidBody.linearVelocity = (transform.position - CurrentRigidBody.position) * 10.0f;
+                LastCollider.enabled = false;
+            }
+            else
+            {
+                LastCollider.enabled = true;
             }
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.attachedRigidbody != null)
+        if (!other.CompareTag("Player"))
         {
-            CurrentRigidBody = other.attachedRigidbody;
+            if (other.attachedRigidbody != null)
+            {
+                CurrentRigidBody = other.attachedRigidbody;
+            }
+            LastCollider = other;
         }
     }
 }
