@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NavNode
   - Scannable
+  - Keycard
   layers:
   - Default
   - TransparentFX
