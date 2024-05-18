@@ -8,6 +8,8 @@ public class BaseEnemy : MonoBehaviour
 {
     public NavMeshAgent PlayerAgent;
 
+    public PlayerController Player;
+
     public Transform DebugPlayerPosition;
 
     public List<GameObject> Nodes;
@@ -38,6 +40,8 @@ public class BaseEnemy : MonoBehaviour
         GameObject.FindGameObjectsWithTag("NavNode", Nodes);
 
         PlayerAgent.SetDestination(Nodes[0].transform.position);
+
+        Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -63,6 +67,23 @@ public class BaseEnemy : MonoBehaviour
                     State = EnemyStates.Walking;
                 }
                 break;
+        }
+        
+        // Detect if the player is visible
+        Vector3 DiffVec = Player.transform.position - transform.position;
+        float Dot = Vector3.Dot(DiffVec, transform.forward);
+        if (Dot > 0.0)
+        {
+            RaycastHit[] Results = Physics.RaycastAll(transform.position, DiffVec, Vector3.Magnitude(DiffVec) + 20.0f);
+
+            foreach (var H in Results)
+            {
+                Debug.Log("Hit: " + H.transform.gameObject.name);
+                if (H.collider.CompareTag("Player"))
+                {
+                    Player.CurrentDetection += Time.deltaTime;
+                }
+            }
         }
     }
 }

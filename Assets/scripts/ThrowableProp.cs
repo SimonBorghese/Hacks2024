@@ -1,10 +1,7 @@
-using System;
 using UnityEngine;
 
-public class PrefabObject : MonoBehaviour
+public class ThrowableProp : MonoBehaviour
 {
-    public PickupObject Object;
-
     public PlayerController Player;
 
     public MeshRenderer Mesh;
@@ -16,6 +13,7 @@ public class PrefabObject : MonoBehaviour
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        
         Mesh = GetComponent<MeshRenderer>();
         BaseMaterial = Mesh.material;
     }
@@ -31,23 +29,6 @@ public class PrefabObject : MonoBehaviour
         {
             Mesh.material = BaseMaterial;
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Player.CurrentObjectTarget = Object;
-            Player.TargetObject = this.gameObject;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Player.CurrentObjectTarget = null;
-            Player.TargetObject = null;
-        }
+        
     }
 }

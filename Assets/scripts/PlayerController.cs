@@ -2,6 +2,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
     public PickupObject CurrentObjectTarget;
 
+    public GameObject TargetObject;
+
     public TMP_Text RenderText;
 
     public float FadeInTime;
@@ -26,15 +30,40 @@ public class PlayerController : MonoBehaviour
     public float CurrentTarget;
 
     public bool FadeIn;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    public Rigidbody heldBody;
+
+    public float forwardHold;
+
+    public Image DetectionImage;
+
+    public float MaxDetection;
+
+    public float CurrentDetection;
+
+    public Image Blackout;
+// Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        RenderText.alpha = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        DetectionImage.transform.localScale = new Vector3(3.0f * (CurrentDetection / MaxDetection), 0.45667f, 1.0f);
+        Blackout.color = new Color(0.0f, 0.0f, 0.0f, (CurrentDetection / MaxDetection));
+
+        if (CurrentDetection >= MaxDetection)
+        {
+            SceneManager.LoadScene(0);
+        }
+        if (heldBody != null)
+        {
+            heldBody.linearVelocity = ((transform.position + (transform.forward * forwardHold)) - heldBody.position) * 20.0f;
+        }
+
         // Update texture transparency
         if (FadeIn)
         {
@@ -43,8 +72,15 @@ public class PlayerController : MonoBehaviour
 
             if (CurrentFadeTime >= FadeInTime)
             {
-                
+                FadeIn = false;
             }
+        }
+        
+
+        if (!FadeIn && CurrentFadeTime > 0.0f)
+        {
+            RenderText.alpha = (CurrentFadeTime / FadeInTime);
+            CurrentFadeTime -= Time.deltaTime;
         }
         Vector3 cameraMovement = new Vector3();
         cameraMovement.x = -Input.GetAxis("Mouse Y");
@@ -84,6 +120,36 @@ public class PlayerController : MonoBehaviour
         else
         {
             SuperSense = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (CurrentObjectTarget != null)
+            {
+                FadeIn = true;
+                RenderText.text = CurrentObjectTarget.Notice;
+                Destroy(TargetObject);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (heldBody == null){
+                
+                RaycastHit[] Hit = Physics.RaycastAll(transform.position, transform.forward, 100.0f);
+
+                foreach (var H in Hit)
+                {
+                    if (H.rigidbody)
+                    {
+                        heldBody = H.rigidbody;
+                    }
+                }
+            }
+            else
+            {
+                heldBody = null;
+            }
         }
 
         InputDirection.y = 0;
