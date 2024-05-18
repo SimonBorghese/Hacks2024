@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - NavNode
+  - Scannable
   layers:
   - Default
   - TransparentFX

@@ -42,16 +42,52 @@ public class PlayerController : MonoBehaviour
     public float CurrentDetection;
 
     public Image Blackout;
+
+    public GameObject ScanPanel;
+
+    public TMP_Text ItemText;
+
+    public TMP_Text DescriptionText;
+
+    public string DefaultItemText;
+
+    public string DefaultDescriptionText;
 // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         RenderText.alpha = 0.0f;
+
+        DefaultItemText = ItemText.text;
+        DefaultDescriptionText = DescriptionText.text;
+        ScanPanel.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (SuperSense)
+        {
+            ItemText.text = "";
+            DescriptionText.text = "";
+            ScanPanel.SetActive(true);
+            RaycastHit[] HitDetects = Physics.RaycastAll(transform.position, playerCamera.transform.forward, 100.0f);
+
+            foreach (var H in HitDetects)
+            {
+                if (H.collider.CompareTag("Scannable"))
+                {
+                    var ScanInfo = H.collider.GetComponent<ScannablePrefabs>().ObjectInfo;
+
+                    ItemText.text = DefaultItemText + ScanInfo.ItemName;
+                    DescriptionText.text = DefaultDescriptionText + ScanInfo.ItemDescription;
+                }
+            }
+        }
+        else
+        {
+            ScanPanel.SetActive(false);
+        }
         DetectionImage.transform.localScale = new Vector3(3.0f * (CurrentDetection / MaxDetection), 0.45667f, 1.0f);
         Blackout.color = new Color(0.0f, 0.0f, 0.0f, (CurrentDetection / MaxDetection));
 
@@ -116,10 +152,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.Q))
         {
             SuperSense = true;
+            ScanPanel.SetActive(true);
         }
         else
         {
             SuperSense = false;
+            ScanPanel.SetActive(false);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
