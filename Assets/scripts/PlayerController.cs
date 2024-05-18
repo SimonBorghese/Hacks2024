@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,6 +9,12 @@ public class PlayerController : MonoBehaviour
     public Camera playerCamera;
 
     public float speed;
+
+    public bool SuperSense;
+
+    public Volume PostProcessingVolume;
+
+    public PickupObject CurrentObjectTarget;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -48,9 +56,28 @@ public class PlayerController : MonoBehaviour
             InputDirection += playerCamera.transform.right;
         }
 
+        if (Input.GetKey(KeyCode.Q))
+        {
+            SuperSense = true;
+        }
+        else
+        {
+            SuperSense = false;
+        }
+
         InputDirection.y = 0;
 
         // Apply the movement
         controller.Move((InputDirection + GravityDirection) * (speed * Time.deltaTime));
+        
+        // Apply post processing
+        if (SuperSense && PostProcessingVolume.weight < 1.0)
+        {
+            PostProcessingVolume.weight += Time.deltaTime;
+        }
+        else if (!SuperSense && PostProcessingVolume.weight > 0.0)
+        {
+            PostProcessingVolume.weight -= Time.deltaTime;
+        }
     }
 }
