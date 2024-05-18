@@ -36,7 +36,7 @@ public class BaseEnemy : MonoBehaviour
     void Start()
     {
         Nodes = new List<GameObject>();
-        RandomSelector = new Random();
+        RandomSelector = new Random((int) Time.realtimeSinceStartup);
         GameObject.FindGameObjectsWithTag("NavNode", Nodes);
 
         PlayerAgent.SetDestination(Nodes[0].transform.position);
@@ -76,14 +76,13 @@ public class BaseEnemy : MonoBehaviour
         {
             RaycastHit[] Results = Physics.RaycastAll(transform.position, DiffVec, Vector3.Magnitude(DiffVec) + 20.0f);
 
-            foreach (var H in Results)
-            {
-                Debug.Log("Hit: " + H.transform.gameObject.name);
-                if (H.collider.CompareTag("Player"))
+          
+                Debug.Log("Hit: " + Results[0].transform.gameObject.name);
+                if (Results[0].collider.CompareTag("Player"))
                 {
                     Player.CurrentDetection += Time.deltaTime;
                 }
-            }
+           
         }
     }
 }

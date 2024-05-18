@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SWorkScene.unity
-    guid: d9124e0cc77bcb70e9e1399c3249d9bf
+    path: Assets/Scenes/MainScene.unity
+    guid: 0183121f908530046828d4e1c3ce9bfe
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: f9fbebde9e9eb2646899ee352bac86c3, type: 2}
