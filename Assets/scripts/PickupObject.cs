@@ -10,4 +10,5 @@ public class PickupObject : ScriptableObject
     };
 
     public ObjectType Type;
+    public string Notice;
 }

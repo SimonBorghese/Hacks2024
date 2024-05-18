@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -15,7 +16,16 @@ public class PlayerController : MonoBehaviour
     public Volume PostProcessingVolume;
 
     public PickupObject CurrentObjectTarget;
-    
+
+    public TMP_Text RenderText;
+
+    public float FadeInTime;
+
+    public float CurrentFadeTime;
+
+    public float CurrentTarget;
+
+    public bool FadeIn;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,6 +35,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Update texture transparency
+        if (FadeIn)
+        {
+            RenderText.alpha = (CurrentFadeTime / FadeInTime);
+            CurrentFadeTime += Time.deltaTime;
+
+            if (CurrentFadeTime >= FadeInTime)
+            {
+                
+            }
+        }
         Vector3 cameraMovement = new Vector3();
         cameraMovement.x = -Input.GetAxis("Mouse Y");
         cameraMovement.y = Input.GetAxis("Mouse X");
