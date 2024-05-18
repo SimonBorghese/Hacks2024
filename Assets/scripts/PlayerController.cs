@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -52,6 +53,16 @@ public class PlayerController : MonoBehaviour
     public string DefaultItemText;
 
     public string DefaultDescriptionText;
+
+    public InputActionReference JoystickL;
+
+    public InputActionReference InteractButton;
+
+    public InputActionReference SenseMode;
+
+    public InputActionAsset Actions;
+
+    public bool bDisregardInput;
 // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -61,6 +72,14 @@ public class PlayerController : MonoBehaviour
         DefaultItemText = ItemText.text;
         DefaultDescriptionText = DescriptionText.text;
         ScanPanel.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        if (Actions != null)
+        {
+            Actions.Enable();
+        }
     }
 
     // Update is called once per frame
@@ -89,7 +108,7 @@ public class PlayerController : MonoBehaviour
             ScanPanel.SetActive(false);
         }
         DetectionImage.transform.localScale = new Vector3(3.0f * (CurrentDetection / MaxDetection), 0.45667f, 1.0f);
-        Blackout.color = new Color(0.0f, 0.0f, 0.0f, (CurrentDetection / MaxDetection));
+        //Blackout.color = new Color(0.0f, 0.0f, 0.0f, (CurrentDetection / MaxDetection));
 
         if (CurrentDetection >= MaxDetection)
         {
@@ -118,38 +137,18 @@ public class PlayerController : MonoBehaviour
             RenderText.alpha = (CurrentFadeTime / FadeInTime);
             CurrentFadeTime -= Time.deltaTime;
         }
-        Vector3 cameraMovement = new Vector3();
-        cameraMovement.x = -Input.GetAxis("Mouse Y");
-        cameraMovement.y = Input.GetAxis("Mouse X");
-        transform.Rotate(cameraMovement);
-
-        Vector3 cameraRotation = transform.eulerAngles;
-        cameraRotation.z = 0.0f;
-        transform.eulerAngles = cameraRotation;
-        
         Vector3 InputDirection = new Vector3();
         Vector3 GravityDirection = new Vector3(0.0f, -9.8f, 0.0f);
-        if (Input.GetKey(KeyCode.W))
-        {
-            InputDirection += playerCamera.transform.forward;
-        }
+        Vector2 InputController = JoystickL.action.ReadValue<Vector2>();
+        InputDirection += playerCamera.transform.forward * InputController.y;
+ 
+        InputDirection += playerCamera.transform.right * InputController.x;
+       
+        float isSense = SenseMode.action.ReadValue<float>();
+        float isInteract = InteractButton.action.ReadValue<float> ();
 
-        if (Input.GetKey(KeyCode.S))
-        {
-            InputDirection -= playerCamera.transform.forward;
-        }
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            InputDirection -= playerCamera.transform.right;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            InputDirection += playerCamera.transform.right;
-        }
-
-        if (Input.GetKey(KeyCode.Q))
+        if (isSense > 0.5f)
         {
             SuperSense = true;
             ScanPanel.SetActive(true);
@@ -160,7 +159,7 @@ public class PlayerController : MonoBehaviour
             ScanPanel.SetActive(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (isInteract > 0.5f)
         {
             if (CurrentObjectTarget != null)
             {
@@ -170,37 +169,17 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (heldBody == null){
-                
-                RaycastHit[] Hit = Physics.RaycastAll(transform.position, transform.forward, 100.0f);
-
-                foreach (var H in Hit)
-                {
-                    if (H.rigidbody)
-                    {
-                        heldBody = H.rigidbody;
-                    }
-                }
-            }
-            else
-            {
-                heldBody = null;
-            }
-        }
-
         InputDirection.y = 0;
 
         // Apply the movement
         controller.Move((InputDirection + GravityDirection) * (speed * Time.deltaTime));
         
         // Apply post processing
-        if (SuperSense && PostProcessingVolume.weight < 1.0)
+        if (SuperSense || PostProcessingVolume.weight < (CurrentDetection / MaxDetection))
         {
             PostProcessingVolume.weight += Time.deltaTime;
         }
-        else if (!SuperSense && PostProcessingVolume.weight > 0.0)
+        else if (!SuperSense || PostProcessingVolume.weight > (CurrentDetection / MaxDetection))
         {
             PostProcessingVolume.weight -= Time.deltaTime;
         }

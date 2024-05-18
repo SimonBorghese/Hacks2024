@@ -1,0 +1,74 @@
+{
+    "name": "VRInputs",
+    "maps": [
+        {
+            "name": "MapForOcusus",
+            "id": "0fc29ae7-7f45-4ed4-949e-dff75661a23c",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "abee985c-67e5-4ba8-a741-c89c99f5fad6",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Pickup",
+                    "type": "Button",
+                    "id": "a0043781-453e-4bec-9473-6e4a88e5a092",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SenseMode",
+                    "type": "Button",
+                    "id": "2170e24e-f878-4bae-bb02-6c1a9ef2b08d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9811f41a-893f-4edc-b1ba-fd818e5c34ac",
+                    "path": "<OculusTouchController>{LeftHand}/thumbstick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fce2fd67-4f6f-40e1-b436-7a23f34a020f",
+                    "path": "<OculusTouchController>{RightHand}/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pickup",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f28312ae-dd04-4207-9679-ebea66e49f48",
+                    "path": "<OculusTouchController>/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SenseMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
