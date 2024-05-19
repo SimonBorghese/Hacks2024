@@ -177,6 +177,7 @@ public class PlayerController : MonoBehaviour
                 FadeIn = true;
                 RenderText.text = CurrentObjectTarget.Notice;
                 Destroy(TargetObject);
+                CurrentObjectTarget = null;
                 FoundEvidence++;
             }
         }
