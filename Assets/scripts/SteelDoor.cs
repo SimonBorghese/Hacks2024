@@ -6,6 +6,8 @@ public class SteelDoor : MonoBehaviour
     public Material alternativeMaterial;
 
     public string ExchangeKeycardName;
+
+    public bool Active = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -15,7 +17,10 @@ public class SteelDoor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Active)
+        {
+            GetComponent<MeshRenderer>().material = alternativeMaterial;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,6 +33,7 @@ public class SteelDoor : MonoBehaviour
                 GetComponent<MeshCollider>().enabled = false;
                 GetComponent<MeshRenderer>().material = alternativeMaterial;
                 Destroy(other.gameObject);
+                Active = true;
             }
         }
     }
