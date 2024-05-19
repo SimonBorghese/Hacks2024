@@ -974,6 +974,7 @@ MonoBehaviour:
   SenseMode: {fileID: 5704461235490248054, guid: bd72174de4b7cdc4b92e79c6f0d2ea1b, type: 3}
   Actions: {fileID: -944628639613478452, guid: bd72174de4b7cdc4b92e79c6f0d2ea1b, type: 3}
   bDisregardInput: 0
+  BaseCameraHeight: 0
 --- !u!143 &8523615627869780106
 CharacterController:
   m_ObjectHideFlags: 0

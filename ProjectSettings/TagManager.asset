@@ -7,6 +7,7 @@ TagManager:
   - NavNode
   - Scannable
   - Keycard
+  - Enemy
   layers:
   - Default
   - TransparentFX

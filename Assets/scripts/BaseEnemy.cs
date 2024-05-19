@@ -31,17 +31,20 @@ public class BaseEnemy : MonoBehaviour
         Waiting
     };
 
+    public static int count = 0;
+
     public EnemyStates State;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Nodes = new List<GameObject>();
-        RandomSelector = new Random((int) Time.realtimeSinceStartup);
+        RandomSelector = new Random((int) Time.time + count);
         GameObject.FindGameObjectsWithTag("NavNode", Nodes);
 
         PlayerAgent.SetDestination(Nodes[0].transform.position);
 
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        count++;
     }
 
     // Update is called once per frame
@@ -76,9 +79,7 @@ public class BaseEnemy : MonoBehaviour
         {
             RaycastHit[] Results = Physics.RaycastAll(transform.position, DiffVec, Vector3.Magnitude(DiffVec) + 20.0f);
 
-          
-                Debug.Log("Hit: " + Results[0].transform.gameObject.name);
-                if (Results[0].collider.CompareTag("Player"))
+                          if (Results[0].collider.CompareTag("Player"))
                 {
                     Player.CurrentDetection += Time.deltaTime;
                 }

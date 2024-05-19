@@ -63,6 +63,8 @@ public class PlayerController : MonoBehaviour
     public InputActionAsset Actions;
 
     public bool bDisregardInput;
+
+    public float BaseCameraHeight;
 // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -72,6 +74,8 @@ public class PlayerController : MonoBehaviour
         DefaultItemText = ItemText.text;
         DefaultDescriptionText = DescriptionText.text;
         ScanPanel.SetActive(false);
+
+        BaseCameraHeight = controller.center.y;
     }
 
     private void OnEnable()
@@ -85,6 +89,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float BaseHeight = 1.361f;
+        controller.height = BaseHeight + playerCamera.transform.localPosition.y;
+
         if (SuperSense)
         {
             ItemText.text = "";
