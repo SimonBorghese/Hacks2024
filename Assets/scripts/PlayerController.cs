@@ -65,6 +65,10 @@ public class PlayerController : MonoBehaviour
     public bool bDisregardInput;
 
     public float BaseCameraHeight;
+
+    public int FoundEvidence;
+
+    public int RequiredEvidence;
 // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -173,7 +177,14 @@ public class PlayerController : MonoBehaviour
                 FadeIn = true;
                 RenderText.text = CurrentObjectTarget.Notice;
                 Destroy(TargetObject);
+                FoundEvidence++;
             }
+        }
+
+        if (FoundEvidence >= RequiredEvidence)
+        {
+            FadeIn = true;
+            RenderText.text = "You have found enough evidence to prosecute, now get out before they catch you!";
         }
 
         InputDirection.y = 0;
